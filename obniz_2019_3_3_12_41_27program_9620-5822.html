@@ -121,7 +121,7 @@
             "快適": kaitekiData,
             "SOS": sosData
           });
-          const HashData = {
+          const UserOpinionHashData = {
             "暑い": atuiData,
             "寒い": samuiData,
             "快適": kaitekiData,
@@ -134,28 +134,35 @@
               led.on();
               console.log("鳴らします");
               console.log(sosData);
-          }
           } else if (sosData === 0) {
 						// オフにする
 						led.off();
 					}
-      　　CheckEnv();
-          sendDataToDisplay(HashData);
+					const kionHashData = CheckEnv();
+					const totalHashData = Object.assign(kionHashData, UserOpinionHashData)
+					sendDataToDisplay(totalHashData);
       }
 			
     }
     
-    function sendDataToDisplay(HashData) {
-      // ここで、暑いなどを更新するAPIを叩く
+    function sendDataToDisplay(totalHashData) {
+			// これで、obnizで取得したデータをwebサーバに送る
+			console.log(totalHashData);
     }
-	function CheckEnv(){
-		 var T=(obniz.ad9.value)/5.0*1023.0
-		 var F=(obniz.ad11.value)/5.0*1023.0
-		 var temp=(1/(0.002375311945203 +  0.000246322089759* Math.log(T) +  Math.pow(0.000000280194860*Math.log(T),3)))-240;
-		 var humid=(F*(5.0/3.3))/10.24;
-		 console.log("気温"+temp+" ℃");
-		 console.log("湿度 "+humid+"%");
-		 }
+		function CheckEnv(){
+			var T=(obniz.ad9.value)/5.0*1023.0
+			var F=(obniz.ad11.value)/5.0*1023.0
+			var temp=(1/(0.002375311945203 +  0.000246322089759* Math.log(T) +  Math.pow(0.000000280194860*Math.log(T),3)))-240;
+			var humid=(F*(5.0/3.3))/10.24;
+			var intTemp = Number(temp);
+			var intHumid = Number(humid);
+			console.log("気温"+temp+" ℃");
+			console.log("湿度 "+humid+"%");
+			return {
+				kion: intTemp,
+				shitudo: intHumid
+			}
+		}
   </script>
 </head>
 <body>
