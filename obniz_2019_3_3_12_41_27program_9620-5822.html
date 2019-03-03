@@ -128,13 +128,18 @@
             "SOS": sosData
           };
           // sosを鳴らすとき
+					var led = obniz.wired("LED", { anode: 0, cathode: 1 });
           if (sosData === 1) {
-              var  led = obniz.wired("LED", { anode:0, cathode:1 } );
+						// オンにする
               led.on();
               console.log("鳴らします");
               console.log(sosData);
           }
-					CheckEnv();
+          } else if (sosData === 0) {
+						// オフにする
+						led.off();
+					}
+      　　CheckEnv();
           sendDataToDisplay(HashData);
       }
 			
