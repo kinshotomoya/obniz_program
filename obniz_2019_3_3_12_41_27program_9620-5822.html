@@ -71,7 +71,8 @@
 	  });
 	  obniz.ble.advertisement.start();
       
-      liffGetAndWriteUserOpinionToDevice();
+    liffGetAndWriteUserOpinionToDevice();
+	 
 
 	  // writeCharacteristic.onwritefromremote = function(address, newvalue) {
 	  //   if (newvalue[0] <= 1 ) {
@@ -98,6 +99,8 @@
     }
     
     async function getUserOpinion () {
+		 obniz.ad9.start();
+		 obniz.ad11.start();
       var step;
       for (step = 0; step < 10; step++) {
           // 暑い
@@ -131,18 +134,28 @@
               led.on();
               console.log("鳴らします");
               console.log(sosData);
+          }
           } else if (sosData === 0) {
 						// オフにする
 						led.off();
 					}
+      　　CheckEnv();
           sendDataToDisplay(HashData);
       }
+			
     }
     
     function sendDataToDisplay(HashData) {
       // ここで、暑いなどを更新するAPIを叩く
     }
-    
+	function CheckEnv(){
+		 var T=(obniz.ad9.value)/5.0*1023.0
+		 var F=(obniz.ad11.value)/5.0*1023.0
+		 var temp=(1/(0.002375311945203 +  0.000246322089759* Math.log(T) +  Math.pow(0.000000280194860*Math.log(T),3)))-240;
+		 var humid=(F*(5.0/3.3))/10.24;
+		 console.log("気温"+temp+" ℃");
+		 console.log("湿度 "+humid+"%");
+		 }
   </script>
 </head>
 <body>
